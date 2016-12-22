@@ -5,14 +5,14 @@
 </form>
 
 <div class="task-list">
-    <div *ngFor="let task of tasks">
-        <div class="col-md-1">
+    <div class="row" *ngFor="let task of tasks">
+        <div class="col-md-1 col-xs-1">
             <input type="checkbox" [checked]="task.isDone" (click)="updateStatus(task)">
         </div>
-        <div class="col-md-7">
+        <div class="col-md-7 col-xs-7">
             {{task.title}}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-4">
             <input type="button" (click)="deleteTask(task._id)" value="Delete" class="btn btn-danger">
         </div>
         <br><br>

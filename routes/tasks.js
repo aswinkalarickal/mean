@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var mongojs = require('mongojs');
-var db = mongojs('mongodb://localhost:27017/taskslist', ['tasks']);
+var mongo = require('../mongo');
+var util = require('../util');
 
 // Get all tasks
 router.get('/tasks', function (req, res, next) {
-    db.tasks.find(function (err, tasks) {
+    mongo.find('dbTasks', function(err, tasks) {
         if (err) {
             res.send(err);
         }
@@ -15,11 +15,11 @@ router.get('/tasks', function (req, res, next) {
 
 // Get single task
 router.get('/task/:id', function (req, res, next) {
-    db.tasks.findOne({_id: mongojs.ObjectId(req.params.id)}, function (err, task) {
+    mongo.findOne('dbTasks', {_id: util.getObjectId(req.params.id)}, function(err, tasks) {
         if (err) {
             res.send(err);
         }
-        res.json(task);
+        res.json(tasks);
     });
 });
 
@@ -32,7 +32,7 @@ router.post('/task', function (req, res, next) {
             error: "Bad Data"
         });
     } else {
-        db.tasks.save(task, function (err, task) {
+        mongo.save('dbTasks', task, function(err, task) {
             if (err) {
                 res.send(err);
             }
@@ -43,7 +43,7 @@ router.post('/task', function (req, res, next) {
 
 // Delete task
 router.delete('/task/:id', function (req, res, next) {
-    db.tasks.remove({_id: mongojs.ObjectId(req.params.id)}, function (err, task) {
+    mongo.remove('dbTasks', {_id: util.getObjectId(req.params.id)}, function (err, task) {
         if (err) {
             res.send(err);
         }
@@ -70,7 +70,7 @@ router.put('/task/:id', function (req, res, next) {
             error: "Bad Data"
         });
     } else {
-        db.tasks.update({_id: mongojs.ObjectId(req.params.id)}, updatedTask, {}, function (err, task) {
+        mongo.update('dbTasks', {_id: util.getObjectId(req.params.id)}, updatedTask, {}, function (err, task) {
             if (err) {
                 res.send(err);
             }
